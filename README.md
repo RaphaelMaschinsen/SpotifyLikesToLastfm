@@ -6,6 +6,7 @@ This Python script allows you to transfer your liked songs from Spotify to your 
 
 - **Automatic Transfer**: The script automatically transfers your liked songs from Spotify to Last.fm.
 - **Automatic Updates**: It keeps a log of already transferred songs and stops once the transfered likes are up to date.
+- **Clean Titles**: Strips release markers like `- 2014 Remaster`, `(Deluxe Edition)` or `(Explicit)` before loving, so the love lands on the same Last.fm track your scrobbles use instead of a separate, album-less entry. Set `CLEAN_TITLES = False` to love Spotify's exact titles.
 - **Customizable Limit**: You can optionally set a limit on the number of songs to transfer. It will always start transferring the most recent likes.
 
 ## Prerequisites

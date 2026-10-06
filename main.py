@@ -29,10 +29,14 @@ import pylast
 import os
 from typing import Optional
 
+from title_cleaner import clean_title
+
 # Limit how many liked songs you want to transfer (order is starting with the most recent likes)
 # Set to None to transfer all liked songs
 LIMIT_NUMBER_OF_RECENT_LIKES_TO_TRANSFER: Optional[int] = None
 LOG_FILE = 'loved_songs.log'
+# Love "Changes" instead of "Changes - 2013 Remaster", so loves land on the track you actually scrobble
+CLEAN_TITLES = True
 
 # Replace these with your actual credentials
 SPOTIFY_CLIENT_ID = 'SPOTIFY_CLIENT_ID'
@@ -104,10 +108,11 @@ while True:
             encountered_already_loved_song = True
             break
 
-        print(f"Loving {track_name} by {artist_name} on Last.fm")
+        lastfm_track_name = clean_title(track_name) if CLEAN_TITLES else track_name
+        print(f"Loving {lastfm_track_name} by {artist_name} on Last.fm")
 
         # Love the song on Last.fm
-        track_lfm = network.get_track(artist_name, track_name)
+        track_lfm = network.get_track(artist_name, lastfm_track_name)
         track_lfm.love()
 
         # Log the song details to the file
