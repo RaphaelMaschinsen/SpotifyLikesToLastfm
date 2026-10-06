@@ -75,7 +75,6 @@ loved_songs_log = read_loved_songs_log(LOG_FILE)
 # Initialize variables for loop
 offset = 0
 liked_songs_count = 0
-encountered_already_loved_song = False
 
 while True:
     # Fetch liked songs in batches of 50
@@ -98,11 +97,9 @@ while True:
         track_name = track['name']
         song_identifier = f"{artist_name} - {track_name} - {track_id}"
 
-        # Stop the process if the song is already loved
+        # Skip rather than stop: an interrupted first run leaves older likes unlogged behind the logged ones
         if song_identifier in loved_songs_log:
-            print(f"Encountered already loved song: {track_name} by {artist_name}. Stopping the process.")
-            encountered_already_loved_song = True
-            break
+            continue
 
         print(f"Loving {track_name} by {artist_name} on Last.fm")
 
@@ -115,7 +112,7 @@ while True:
 
         liked_songs_count += 1
 
-    if encountered_already_loved_song or (
+    if (
         LIMIT_NUMBER_OF_RECENT_LIKES_TO_TRANSFER is not None and
         liked_songs_count >= LIMIT_NUMBER_OF_RECENT_LIKES_TO_TRANSFER
     ):
@@ -124,7 +121,4 @@ while True:
     # Increase offset to get the next batch of liked songs
     offset += 50
 
-if encountered_already_loved_song:
-    print("Stopped because it encountered an already logged liked song.")
-else:
-    print(f"Done loving {liked_songs_count} liked songs on Last.fm!")
+print(f"Done loving {liked_songs_count} new liked songs on Last.fm!")
